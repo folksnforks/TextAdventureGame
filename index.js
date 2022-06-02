@@ -2,18 +2,19 @@
 
 // Required for Node console input.
 const readline = require('readline-sync');
-
+// C:/Users/MG Redux/AppData/Local/Microsoft/TypeScript/4.6/node_modules/@types/readline-sync/index
 // Variable that holds the player's input from the console.
 let playerResponse;
 
 
 // Class for general character properties
 class Character {
-   constructor(name, hp, atkPower) {
-      this.name = name,
-      this.hp = hp,
-      this.atkPower = atkPower,
-      this.evade
+   constructor(name, hp, atkPower, armor) {
+      this.name = name;
+      this.hp = hp;
+      this.atkPower = atkPower;
+      this.armor = armor;
+      this.evade;
    }
 
    isAlive() {
@@ -29,16 +30,16 @@ class Character {
    attack(opponent) {
       console.log('');
 
-      if (opponent.evade === 1 || opponent.evade === 2) {
+      if (opponent.evade === 1 || opponent.evade === 2) {   //If opponent dodges
          console.log(`${opponent.name} evaded the attack`);
-      } else if (opponent.evade === 3) {
-         opponent.hp -= (this.atkPower + 1);
+      } else if (opponent.evade === 3) {                    //If opponent receives 1 additional damage
+         opponent.hp -= (this.atkPower + 1 - opponent.armor);
          console.log(`${opponent.name} received + 1 attack damage`);
-      } else if (opponent.evade === 4) {
-         opponent.hp -= (this.atkPower - 1);
+      } else if (opponent.evade === 4) {                    //If opponent receives 1 less damage
+         opponent.hp -= (this.atkPower - 1 - opponent.armor);
          console.log(`${this.name}'s attack was reduced by 1`);
-      } else {
-         opponent.hp -= this.atkPower;
+      } else {                                              //If opponent receives NORMAL damage
+         opponent.hp -= (this.atkPower - opponent.armor);
       }
       
       // Ensures that we never display negative health values.
@@ -54,15 +55,15 @@ class Character {
 }
 
 // Menu asking name and type of character
-console.log('\n|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|')
+console.log('|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|')
 console.log('|   Welcome to Original Game... for real   |')
-console.log('|＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿|')
+console.log('|__________________________________________|')
 console.log('  (\\__/)  || ')
 console.log('  (•ㅅ•)  || ')
 console.log('  / 　 づ  \'\)\n')
 console.log('What is your name?\n')
 
-const userName = readLine.question();
+const userName = readline.question();
 
 console.log(`\nHey, ${userName}, you just finished & a monster appears`);
 
@@ -70,8 +71,8 @@ function mainGameFunc() {
 
    // Build hero and monster objects
 
-   const hero = new Character(userName, 10, 3);
-   const monster = new Character('monster', 10, 2);
+   const hero = new Character(userName, 10, 3, 1);
+   const monster = new Character('monster', 10, 2, 0);
 
    do {
       hero.evadeRandomNum();
